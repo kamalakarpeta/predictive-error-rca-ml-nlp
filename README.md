@@ -1,8 +1,8 @@
 # Error Telemetry Pipeline for Predictive RCA (Data Engineering for ML)
 
-> The ingestion + feature pipeline that feeds ML-driven error prediction and root-cause analysis · **~2017** · Python data engineering for ML
+> The ingestion + feature pipeline that feeds ML-driven error prediction and root-cause analysis · **2018** · Python data engineering for ML
 
-**Role:** Data & AI Platform Architect (Data Engineer / ML platform)
+**Role at the time:** Data Engineer → Senior Data Engineer · *(2018 — data engineering for an ML platform)*
 **Type:** Portfolio case study — architecture & approach are representative; production code is proprietary.
 
 ---
@@ -11,7 +11,7 @@
 
 A platform was emitting errors faster than the team could triage them, and the **ML engineers** tasked with predicting and classifying those failures had no reliable data to work from — logs were raw, unlabeled and scattered across systems.
 
-This project (**circa 2017**) is **data engineering for ML**: I built the pipeline that ingests error logs, user inputs and system telemetry; engineers the features (including **NLP-derived** signals from message text); produces labeled, query-ready **feature and serving tables**; and exposes a consistent **train/serve data contract**. The ML engineers then built the classifiers, forecasts and anomaly detectors **on top of my data** — they owned the models, I owned the data substrate and the real-time feature delivery that made the models possible. It marks the stage where I began serving **ML engineers** as a downstream consumer.
+This project (**circa 2018**) is **data engineering for ML**: I built the pipeline that ingests error logs, user inputs and system telemetry; engineers the features (including **NLP-derived** signals from message text); produces labeled, query-ready **feature and serving tables**; and exposes a consistent **train/serve data contract**. The ML engineers then built the classifiers, forecasts and anomaly detectors **on top of my data** — they owned the models, I owned the data substrate and the real-time feature delivery that made the models possible. It marks the stage where I began serving **ML engineers** as a downstream consumer.
 
 ## Architecture
 
@@ -56,7 +56,7 @@ flowchart LR
 
 ## Where this sits in my journey
 
-Part of my **Data & AI Platform Architect** portfolio — the **~2017** stage, where my pipelines began explicitly serving ML engineers.
+Part of my journey toward **Data & AI Platform Architect** — the **2018** stage, when I was moving from **Data Engineer to Senior Data Engineer** and my pipelines began explicitly serving ML engineers.
 
 ⏮ prev: [market-performance-analytics-python-ml](https://github.com/kamalakarpeta/market-performance-analytics-python-ml) · ⏭ next: [yield-curve-outlier-detection-aws-streamlit](https://github.com/kamalakarpeta/yield-curve-outlier-detection-aws-streamlit)
 Full journey: https://kamalakarpeta.github.io
