@@ -1,64 +1,62 @@
-# Predictive Error Analysis & Root-Cause Identification (ML + NLP)
+# Error Telemetry Pipeline for Predictive RCA (Data Engineering for ML)
 
-> Proactively predict failures and pinpoint root cause to cut MTTR · **~2017** · Python ML + NLP
+> The ingestion + feature pipeline that feeds ML-driven error prediction and root-cause analysis · **~2017** · Python data engineering for ML
 
-**Role:** Data & AI Platform Architect (Data Scientist / ML Engineer)
+**Role:** Data & AI Platform Architect (Data Engineer / ML platform)
 **Type:** Portfolio case study — architecture & approach are representative; production code is proprietary.
 
 ---
 
 ## Context
 
-A data/operations platform was generating errors faster than the team could triage them. Failures were reactive: someone noticed, someone dug through logs, someone eventually found the cause — and mean-time-to-repair suffered.
+A platform was emitting errors faster than the team could triage them, and the **ML engineers** tasked with predicting and classifying those failures had no reliable data to work from — logs were raw, unlabeled and scattered across systems.
 
-This project (**circa 2017**) turned historical error logs, user inputs and system telemetry into a predictive system that **classifies errors by root cause**, **forecasts error trends**, and **flags anomalies** before they cascade. It is the **ML / MLOps** stage of my journey — moving models out of notebooks and toward production monitoring, alerting and operational value.
+This project (**circa 2017**) is **data engineering for ML**: I built the pipeline that ingests error logs, user inputs and system telemetry; engineers the features (including **NLP-derived** signals from message text); produces labeled, query-ready **feature and serving tables**; and exposes a consistent **train/serve data contract**. The ML engineers then built the classifiers, forecasts and anomaly detectors **on top of my data** — they owned the models, I owned the data substrate and the real-time feature delivery that made the models possible. It marks the stage where I began serving **ML engineers** as a downstream consumer.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  LOGS[Error logs · user input · system telemetry] --> PREP[Cleaning &<br/>preprocessing]
-  PREP --> FE[Feature engineering<br/>time features + NLP on messages]
-  FE --> CLF[Classifier<br/>Random Forest / XGBoost<br/>root-cause category]
-  FE --> TS[Forecasting<br/>ARIMA / LSTM<br/>error-rate trend]
-  FE --> AD[Anomaly detection<br/>Isolation Forest / One-Class SVM]
-  CLF --> SERVE[Real-time scoring]
-  TS --> SERVE
-  AD --> SERVE
-  SERVE --> ALERT[Automated alerts +<br/>root-cause insight]
+  LOGS[Error logs · user input · system telemetry] --> ING[Ingestion +<br/>preprocessing]
+  ING --> FE[Feature engineering<br/>time features + NLP on messages]
+  FE --> LBL[Labeling<br/>root-cause classes]
+  LBL --> FT[(Feature & label tables)]
+  FT --> OFF[Offline: ML engineers<br/>train classifier / forecast / anomaly]
+  FE --> RT[Real-time feature delivery<br/>train/serve parity]
+  RT --> SCORE[Online scoring<br/>+ automated alerts]
 ```
 
 ## Tech stack
 
 - **Languages:** Python
-- **ML:** scikit-learn (Random Forest, Isolation Forest, One-Class SVM), XGBoost
-- **Time series:** ARIMA, LSTM
-- **NLP:** keyword extraction, sentiment/tone features on error messages
-- **Ops:** real-time scoring, automated alerting, model monitoring & refinement
+- **Data pipeline:** ingestion, preprocessing, feature engineering, labeling
+- **NLP feature extraction:** keyword/sentiment features on error messages (data prep, not model ownership)
+- **Serving:** real-time feature delivery, online scoring contract, automated alerting hooks
+- *(Downstream, by ML engineers: Random Forest/XGBoost classifiers, ARIMA/LSTM forecasts, Isolation Forest/One-Class SVM anomaly detection)*
 
 ## Data model & architecture
 
-- **Event-level feature schema** — each error becomes a feature vector: error type, component, user/session, timestamp, system parameters, plus engineered **time-based** features (hour-of-day, day-of-week) and **NLP-derived** features from the message text.
-- **Labels by root-cause class** — user error vs system error vs configuration issue, enabling supervised classification.
-- **Streaming inference contract** — the same feature transform runs at train and serve time to avoid skew.
+- **Event-level feature schema** — each error becomes a feature vector (error type, component, user/session, timestamp, system params) enriched with engineered **time-based** and **NLP-derived** features.
+- **Label tables** — root-cause categories (user / system / configuration) maintained as a curated labeling layer so the ML engineers get supervised training data.
+- **Train/serve parity contract** — one shared feature transform runs offline and online, so the ML team's models don't suffer online/offline skew. The pipeline owns this guarantee.
 
 ## Key design decisions
 
-- **Three complementary models, not one** — classification (what kind), forecasting (how much, soon), anomaly detection (something new) cover different failure questions.
-- **Handle class imbalance explicitly** — rare-but-critical error classes weighted/resampled so they aren't drowned out.
-- **NLP on the message, not just the code** — free-text error messages carry root-cause signal that structured fields miss.
-- **Train/serve parity** — one shared feature pipeline to prevent the classic online/offline skew that silently degrades production models.
+- **Own the data contract, not the model** — my deliverable is reliable features, labels and a skew-free serving path; classification and anomaly detection are the ML engineers' workload I enable.
+- **Engineer NLP features at the data layer** — extracting signal from free-text messages upstream means every model the team builds inherits it for free.
+- **Train/serve parity by construction** — a single feature transform prevents the silent production degradation that kills ML projects.
+- **Labeling as a first-class pipeline output** — curated, consistent labels are what make supervised modeling downstream even possible.
 
 ## Outcome & impact
 
-- **Proactive** identification of likely failures before they hit users.
-- **Reduced MTTR** through automated root-cause categorization and faster triage.
-- **Higher reliability** by addressing recurring underlying causes, not just symptoms.
-- Established the monitoring/alerting and model-lifecycle patterns that mature into governed MLOps on the lakehouse.
+- **Unblocked the ML team** — reliable features and labels turned raw logs into a trainable, serveable dataset.
+- **Production-ready feature delivery** — train/serve parity let the resulting models run online without skew.
+- **Reduced MTTR (downstream)** — the models built on this pipeline enabled proactive detection and faster root-cause triage.
+- Established the **feature-pipeline and serving-contract** patterns that mature into governed MLOps and, later, GenAI retrieval on the lakehouse.
 
 ## Where this sits in my journey
 
-Part of my **Data & AI Platform Architect** portfolio — the **~2017 ML / MLOps** stage.
+Part of my **Data & AI Platform Architect** portfolio — the **~2017** stage, where my pipelines began explicitly serving ML engineers.
 
 ⏮ prev: [market-performance-analytics-python-ml](https://github.com/kamalakarpeta/market-performance-analytics-python-ml) · ⏭ next: [yield-curve-outlier-detection-aws-streamlit](https://github.com/kamalakarpeta/yield-curve-outlier-detection-aws-streamlit)
 Full journey: https://kamalakarpeta.github.io
