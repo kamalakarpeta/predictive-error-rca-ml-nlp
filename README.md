@@ -56,7 +56,7 @@ flowchart LR
 
 ## Where this sits in my journey
 
-Part of my journey toward **Data & AI Platform Architect** — the **2018** stage, when I was moving from **Data Engineer to Senior Data Engineer** and my pipelines began explicitly serving ML engineers.
+Part of my journey toward **Data & AI Platform Engineer** — the **2018** stage, when I was moving from **Data Engineer to Senior Data Engineer** and my pipelines began explicitly serving ML engineers.
 
 ⏮ prev: [market-performance-analytics-python-ml](https://github.com/kamalakarpeta/market-performance-analytics-python-ml) · ⏭ next: [yield-curve-outlier-detection-aws-streamlit](https://github.com/kamalakarpeta/yield-curve-outlier-detection-aws-streamlit)
 Full journey: https://kamalakarpeta.github.io
